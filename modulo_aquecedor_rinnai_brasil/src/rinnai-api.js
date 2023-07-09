@@ -173,3 +173,126 @@ module.exports = {
     pressButton,
     getConsumption
 }
+
+
+
+/*
+IMPLEMENTAR TRATAMENTO DE STATUS E ERROS
+
+CÓDIGO DE DIAGNÓSTICO	MOTIVO
+02	Desligamento pelo timer (60 minutos)
+10	Problema na ventoinha ou obstrução no fluxo
+11	Ao ligar não acende ( falta gás,...).
+12	Falta de gás durante o uso
+14	Fusível ou termostato rompido
+16	Alta temperatura da água
+19	Fiação está em curto, fuga de corrente.
+32	Termistor com problema
+52	Válvula modulador de gás (POV) com problema.
+61	Conector da ventoinha solto (RPM)
+71	Válvula solenóide com problema de acionamento
+72	Sensor de chama com problema
+90	Ao ligar não aciona a ventoinha
+99	Ventoinha com problema
+
+"Status ligado/desligado/stand-by: $col0"
+"Erros do sistma: $col01"
+"Número de acionamentos: $col03"
+"Horas de combustão: $col04"
+"Horas de stand-by: $col05"
+"Rotação da ventoinha: $col07"
+"Corrente: $col08"
+"Potência máxima (kcal/min): $col09"
+"Temperatura de entrata: $col10"
+"Temperatura de saída: $col11"
+"Fluxo real: $col12"
+"Vazão mínima p/ acionamento: $col13"
+"Vazão mínima p/ desligamento: $col14"
+"Temperatura setada: $col15"
+"Endereço IP: $col16"
+"Número de série: $col19"
+"Data Firmware: $col22"
+"MAC Address: $col25"
+"Sinal wi-fi: $col37"
+
+// Tratamento do status
+if (msg.payload[0] == 11){
+msg.payload[0] = "desligado"
+}
+if (msg.payload[0] == 41 && msg.payload[2] == 0) {
+msg.payload[0] = "stand-by"
+}
+if (msg.payload[0] == 41 && msg.payload[2] == 1) {
+msg.payload[0] = "em uso"
+}
+if (msg.payload[0] == 21 && msg.payload[2] == 1) {
+msg.payload[0] = "em uso"
+}
+if (msg.payload[0] == 42 && msg.payload[2] == 1) {
+msg.payload[0] = "em uso"
+}
+if (msg.payload[0] == 43 && msg.payload[2] == 1) {
+msg.payload[0] = "em uso"
+}
+
+//Tratamento dos erros
+if (msg.payload[1] == 12) {
+msg.payload[1] = "Código: 12 - Falta de gás em uso"
+}
+else {
+
+if (msg.payload[1] == 10) {
+msg.payload[1] = "Código: 10 - Ventoinha Obstruída"
+}
+else {
+msg.payload[1] = "OK"
+}
+
+// Sensor geral
+msg.entity_id = 'sensor.cozinha_aquecedor_a_gas'
+
+msg.payload = {
+    data: {
+        state: msg.payload[0],
+        attributes: {
+            funcionamento: msg.payload[1],
+            vazao_minima_para_acionamento: parseFloat(msg.payload[13] * 0.01).toFixed(2),
+            vazao_minima_para_desligamento: parseFloat(msg.payload[14] * 0.01).toFixed(2),
+            data_firmware: msg.payload[22],
+            horas_de_combustao: msg.payload[4],
+            potencia_maxima_kcal_min: msg.payload[9],
+            rotacao_da_ventoinha: msg.payload[7],
+            corrente: msg.payload[8],
+            horas_de_stand_by: msg.payload[5],
+            numero_de_serie: msg.payload[19],
+            icon: "mdi:information",
+            friendly_name: "COZINHA Aquecedor à Gás",
+        }
+    }
+};
+
+*/
+
+/*
+Estou tentando descobrir em qual campo consigo a informação sobre o tempo atual de uso, para criar uma automação que reduza a temperatura da água após 12 minutos de banho até chegar aos 36 (semelhante ao que é possível configurar no app da Rinnai em perfil do usuário) - e depois desligue.
+
+No entanto, rodando o código localmente, reparei que alguns dos meus campos de retorno são diferentes dos presumidos por você.
+
+/bus.data: '41,0,0,3400,227,7200,10000,0,0,0,2008,2505,0,278,208,3700,0.0.0.0,null:pri,5,22193138,16244,0,Sep 16 2022,0,Software/System restart,xx:xx:xx:xx:xx:xx,0,0,45,0,0,0,0,0,0,0,0,-84,[0],0'
+
+Enfim, vou tentar decompilar o apk do app da Rinnai para veriguar se consigo alguma informação útil.
+
+
+
+@ale-jr seguem novos campos que eram desconhecidos e são relativos as opções encontradas no menu "Perfil"do app:
+
+29 - duração máxima (em minutos) do tempo de banho antes da redução da temperatura
+30 e 31 são um OR - apenas um pode estar ativado com um número "1" e corresponde na sequencia a "monitorar todos os banhos" ou "monitorar apenas o próximo banho"
+32 - intervalo em segundos para a redução de 1 grau
+33 - preço do m3 da água (últimos 2 digitos são casas decimais)
+34 - preço do m3 do gás (últimos 2 digitos são casas decimais)
+
+Amanhã durante o dia vou configurar com valores corretos e testar em qual campo é retornado o custo do banho.
+
+No entendo ainda precisamos descobrir como realizar o update dessas informações ou obter por get o tempo decorrido do banho.
+*/
