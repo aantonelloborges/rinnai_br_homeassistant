@@ -24,6 +24,7 @@ const setTargetTemperature = async (target, lastTargetTemp = undefined, retries 
     try {
         const targetTemperatureInRange = parseTargetTemperatureToRange(target)
         let currentTargetTemp = +lastTargetTemp
+
         if (!lastTargetTemp) {
             const { targetTemperature: stateTargetTemp, priorityIp } = await getState()
             currentTargetTemp = stateTargetTemp
@@ -33,13 +34,13 @@ const setTargetTemperature = async (target, lastTargetTemp = undefined, retries 
                 stopPreventingUpdates()
                 return false
             }
-            await setPriority(true)
+            //await setPriority(true)
 
         }
 
         if (targetTemperatureInRange === currentTargetTemp) {
             stopPreventingUpdates()
-            await setPriority(false)
+            //await setPriority(false)
             return currentTargetTemp
         }
 
@@ -48,21 +49,21 @@ const setTargetTemperature = async (target, lastTargetTemp = undefined, retries 
         const parsedParams = parseStateParams(response.data)
         currentTargetTemp = parsedParams.targetTemperature
 
-        const otherDeviceHasPriority = parsedParams.priorityIp !== "null" && parsedParams.priorityIp !== options.haIp
-        if (otherDeviceHasPriority) {
-            console.log("[RINNAI API] other device has priority")
-            stopPreventingUpdates()
-            await setPriority(false)
-            return false
-        }
+        // const otherDeviceHasPriority = parsedParams.priorityIp !== "null" && parsedParams.priorityIp !== options.haIp
+        // if (otherDeviceHasPriority) {
+        //     console.log("[RINNAI API] other device has priority")
+        //     stopPreventingUpdates()
+        //     await setPriority(false)
+        //     return false
+        // }
 
         if (targetTemperatureInRange === currentTargetTemp) {
             stopPreventingUpdates()
-            await setPriority(false)
+            //await setPriority(false)
             return currentTargetTemp
         }
 
-        await delay(100)
+        await delay(300)
 
         setTargetTemperature(target, currentTargetTemp, 0)
     }
@@ -71,7 +72,7 @@ const setTargetTemperature = async (target, lastTargetTemp = undefined, retries 
             return setTargetTemperature(target, lastTargetTemp, retries + 1)
         console.log("[RINNAI API] set temperature error", e?.message || e)
         stopPreventingUpdates()
-        await setPriority(false)
+        //await setPriority(false)
         return false
     }
 }
@@ -85,10 +86,10 @@ const setPowerState = async (turnOn) => {
 
 
 const pressButton = async (button) => {
-    await setPriority(true)
+    //await setPriority(true)
     const response = await rinnaiApi(button)
     const params = parseStateParams(response.data)
-    await setPriority(false)
+    //await setPriority(false)
     return params
 
 }

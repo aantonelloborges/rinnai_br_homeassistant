@@ -20,7 +20,8 @@ const update = async () => {
 setInterval(update, pollIntervalInMs)
 
 
-rinnaiApi.setPriority(false)
+//rinnaiApi.setPriority(false)
+rinnaiApi.setPriority(true)
 
 
 mqttClient.on("connect", () => {
