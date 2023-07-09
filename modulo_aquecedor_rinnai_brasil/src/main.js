@@ -20,8 +20,8 @@ const update = async () => {
 setInterval(update, pollIntervalInMs)
 
 
-//rinnaiApi.setPriority(false)
-rinnaiApi.setPriority(true)
+rinnaiApi.setPriority(false)
+//rinnaiApi.setPriority(true)
 
 
 mqttClient.on("connect", () => {
@@ -34,6 +34,11 @@ mqttClient.on("connect", () => {
     mqttClient.subscribe(entities.switchHeating.commandTopic, (error) => {
         if (error) console.log('[MQTT] switch heater subscription error', error)
         else console.log('[MQTT] subscribed to switch heater topic')
+    })
+
+    mqttClient.subscribe(entities.switchPriority.commandTopic, (error) => {
+        if (error) console.log('[MQTT] switch priority subscription error', error)
+        else console.log('[MQTT] subscribed to switch priority topic')
     })
 
     mqttClient.subscribe(entities.increaseTemperatureButton.commandTopic, (error) => {
@@ -53,6 +58,9 @@ mqttClient.on('message', (topic, message) => {
             device.setTargetWaterTemperature(+message.toString())
             break;
         case entities.switchHeating.commandTopic:
+            device.setPowerState(message.toString())
+            break;
+        case entities.switchPriority.commandTopic:
             device.setPowerState(message.toString())
             break;
         case entities.increaseTemperatureButton.commandTopic:
