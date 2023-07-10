@@ -10,19 +10,18 @@ const rinnaiApi = axios.create({
 const setPriority = (requirePriority) => {
     console.log("[RINNAI API] requirePriority", requirePriority)
     const priority = requirePriority ? options.haIp : "null"
+    console.log("[RINNAI API] set priority - priority:", priority)
     return rinnaiApi(`ip:${priority}:pri`)
         .then(() => {
             entities.switchPriority.publish('ON')
             entities.priorityIP.publish(options.haIp)
-            console.log("[RINNAI API] set priority to", priority)
             console.log("[RINNAI API] set priority IP to", options.haIp)
             return true
         })
-        .catch(() => {
+        .catch((e) => {
             entities.switchPriority.publish('OFF')
             entities.priorityIP.publish('Não atribuido')
-            console.log("[RINNAI API] set priority to", priority)
-            console.log("[RINNAI API] set priority IP to", 'Não atribuido')
+            console.log("[RINNAI API] set priority error:", e)
             return false
         })
 }
