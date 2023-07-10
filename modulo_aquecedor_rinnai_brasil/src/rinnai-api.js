@@ -72,7 +72,7 @@ const setTargetTemperature = async (target, lastTargetTemp = undefined, retries 
             return currentTargetTemp
         }
 
-        await delay(300)
+        await delay(60)
 
         setTargetTemperature(target, currentTargetTemp, 0)
     }
