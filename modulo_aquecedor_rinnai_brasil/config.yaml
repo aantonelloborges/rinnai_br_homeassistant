@@ -1,7 +1,8 @@
 name: "Rinnai - ROU003 WIFI"
 description: "Integração para os aquecedores da Rinnai no Brasil com módulo wifi ROU-003"
-version: "1.3.2"
+version: "1.3.3"
 slug: "modulo_aquecedor_rinnai_brasil"
+init: false
 arch:
   - aarch64
   - amd64

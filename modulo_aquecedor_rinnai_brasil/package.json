@@ -1,6 +1,6 @@
 {
   "name": "modulo_aquecedor_rinnai_brasil",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Integração para os aquecedores da Rinnai no Brasil com módulo wifi ROU-003",
   "main": "main.js",
   "scripts": {
