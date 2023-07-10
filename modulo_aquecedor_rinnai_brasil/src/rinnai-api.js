@@ -8,19 +8,20 @@ const rinnaiApi = axios.create({
 
 
 const setPriority = (requirePriority) => {
+    console.log("[RINNAI API] requirePriority", requirePriority)
     const priority = requirePriority ? options.haIp : "null"
     return rinnaiApi(`ip:${priority}:pri`)
         .then(() => {
             entities.switchPriority.publish('ON')
             entities.priorityIP.publish(options.haIp)
-            console.log("[RINNAI API] set priority to", true)
+            console.log("[RINNAI API] set priority to", priority)
             console.log("[RINNAI API] set priority IP to", options.haIp)
             return true
         })
         .catch(() => {
             entities.switchPriority.publish('OFF')
             entities.priorityIP.publish('Não atribuido')
-            console.log("[RINNAI API] set priority to", false)
+            console.log("[RINNAI API] set priority to", priority)
             console.log("[RINNAI API] set priority IP to", 'Não atribuido')
             return false
         })
@@ -86,7 +87,7 @@ const setTargetTemperature = async (target, lastTargetTemp = undefined, retries 
             return setTargetTemperature(target, lastTargetTemp, retries + 1)
         console.log("[RINNAI API] set temperature error", e?.message || e)
         stopPreventingUpdates()
-        await setPriority(false)
+        //await setPriority(false)
         return false
     }
 }
