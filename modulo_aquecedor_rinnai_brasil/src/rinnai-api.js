@@ -56,7 +56,8 @@ const setTargetTemperature = async (target, lastTargetTemp = undefined, retries 
         const parsedParams = parseStateParams(response.data)
         currentTargetTemp = parsedParams.targetTemperature
 
-        entities.priorityIp.publish(parsedParams.priorityIp)
+        entities.priorityIP.publish(parsedParams.priorityIp)
+        console.log('[RINNAI API] Priority Ip: ',parsedParams.priorityIp)
         // const otherDeviceHasPriority = parsedParams.priorityIp !== "null" && parsedParams.priorityIp !== options.haIp
         // if (otherDeviceHasPriority) {
         //     console.log("[RINNAI API] other device has priority")

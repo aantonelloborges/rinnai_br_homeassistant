@@ -66,6 +66,8 @@ const updateParameters = (retries = 0) => {
             entities.outletWaterTemperature.publish(outletTemperature)
             entities.power.publish(powerInkW)
             entities.waterFlow.publish(waterFlow)
+            entities.priorityIP.publish("Não atribuido")
+            console.log('[RINNAI API] Priority Ip: Não atribuido')
 
         })
         .catch(error => {
