@@ -1,5 +1,6 @@
 const axios = require('axios')
 const options = require('./options.js')
+const entities = require('./entities.js')
 const { parseTargetTemperatureToRange, parseRinnaiTemperature, delay, round } = require('./utils.js')
 const rinnaiApi = axios.create({
     baseURL: `http://${options.device.host}`
