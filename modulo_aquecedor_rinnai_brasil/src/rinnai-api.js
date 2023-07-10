@@ -52,7 +52,7 @@ const setTargetTemperature = async (target, lastTargetTemp = undefined, retries 
 
         if (targetTemperatureInRange === currentTargetTemp) {
             stopPreventingUpdates()
-            await setPriority(false)
+            //await setPriority(false)
             return currentTargetTemp
         }
 
@@ -73,7 +73,7 @@ const setTargetTemperature = async (target, lastTargetTemp = undefined, retries 
 
         if (targetTemperatureInRange === currentTargetTemp) {
             stopPreventingUpdates()
-            await setPriority(false)
+            //await setPriority(false)
             return currentTargetTemp
         }
 
@@ -103,7 +103,7 @@ const pressButton = async (button) => {
     await setPriority(true)
     const response = await rinnaiApi(button)
     const params = parseStateParams(response.data)
-    await setPriority(false)
+    //await setPriority(false)
     return params
 
 }
