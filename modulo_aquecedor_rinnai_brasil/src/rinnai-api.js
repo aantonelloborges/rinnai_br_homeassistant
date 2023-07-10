@@ -13,10 +13,12 @@ const setPriority = (requirePriority) => {
     return rinnaiApi(`ip:${priority}:pri`)
         .then(() => {
             entities.switchPriority.publish('ON')
+            entities.priorityIP.publish(options.haIp)
             return true
         })
         .catch(() => {
             entities.switchPriority.publish('OFF')
+            entities.priorityIP.publish('Não atribuido')
             return false
         })
 }

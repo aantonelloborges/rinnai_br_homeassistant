@@ -7,8 +7,12 @@ const setTargetWaterTemperature = (temperature) => {
 }
 
 const setPowerState = (turnOn) => {
-    rinnaiApi.setPowerState(turnOn === "ON")
+    rinnaiApi.setPowerState(turnOn)
         .then((state) => updateDeviceState())
+}
+
+const setPriority = (turnOn) => {
+    rinnaiApi.setPriority(turnOn === "ON")
 }
 
 const increaseTemperature = () => {
@@ -132,6 +136,7 @@ const updateConsumption = (retries = 0) => {
 module.exports = {
     setTargetWaterTemperature,
     setPowerState,
+    setPriority,
     increaseTemperature,
     decreaseTemperature,
     updateParameters,

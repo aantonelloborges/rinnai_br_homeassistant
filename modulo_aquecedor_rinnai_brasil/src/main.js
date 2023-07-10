@@ -61,7 +61,8 @@ mqttClient.on('message', (topic, message) => {
             device.setPowerState(message.toString())
             break;
         case entities.switchPriority.commandTopic:
-            device.setPowerState(message.toString())
+            console.log('[MQTT] message from Priority topic:', message.toString())
+            device.setPriority(message.toString())
             break;
         case entities.increaseTemperatureButton.commandTopic:
             device.increaseTemperature()
