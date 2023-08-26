@@ -65,11 +65,11 @@ while (true) {
 
     console.log(hh, "h", mm, "m");
 
-    if (hh >= 6 && hh <= 23 && mm >= 0 && mm <= 1) {
+    if (hh >= 6 && hh <= 23) {
         console.log("Dia");
         intervalChange = true;
         pollIntervalInMs = (options.device.poll_interval * 1_000) || 2_000;
-    } else if (hh > 23 && hh < 6 && mm >= 0 && mm <= 1) {
+    } else if (hh > 23 && hh < 5) {
         console.log("Noite");
         intervalChange = true;
         pollIntervalInMs = (options.device.poll_interval * 5_000) || 6_000;    
