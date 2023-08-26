@@ -1,10 +1,41 @@
 const device = require('./device.js');
-// const rinnaiApi = require('./rinnai-api.js');
+const rinnaiApi = require('./rinnai-api.js');
 const mqttClient = require('./mqtt.js');
 const options = require("./options.js");
 const entities = require('./entities.js');
 const { delay } = require('./utils.js');
 const SmartInterval = require("smartinterval");
+
+const {execSync} = require('child_process');
+var intervalChange = null;
+var pollIntervalInMs = (options.device.poll_interval * 1_000) || 2_000;
+
+var partOfTheDay = null
+var intervalChange = null
+
+const getInterval = () => {
+    var hh = new Date().getHours()
+    var mm = new Date().getMinutes()
+    console.log(hh, "h", mm, "m")
+
+    if (hh >= 6 && hh <= 23) {
+        if (partOfTheDay != "Day")
+            intervalChange = true
+
+        console.log("Day")
+        partOfTheDay = "Day"
+        pollIntervalInMs = (options.device.poll_interval * 1_000) || 2_000
+
+    } else if (hh > 23 && hh < 6) {
+        if (partOfTheDay != "Night")
+            intervalChange = true
+
+        console.log("Night")
+        partOfTheDay =  "Night"
+        pollIntervalInMs = (options.device.poll_interval * 5_000) || 6_000   
+    }
+    return pollIntervalInMs, intervalChange
+}
 
 mqttClient.on("connect", () => {
     console.log("[MQTT] Connected");
@@ -54,30 +85,14 @@ mqttClient.on('message', (topic, message) => {
     }
 })
 
-const {execSync} = require('child_process');
-var intervalChange = true;
-var pollIntervalInMs = (options.device.poll_interval * 1_000) || 2_000;
+
 
 while (true) { 
 
-    var hh = new Date().getHours();
-    var mm = new Date().getMinutes();
-
-    console.log(hh, "h", mm, "m");
-
-    if (hh >= 6 && hh <= 23) {
-        console.log("Dia");
-        intervalChange = true;
-        pollIntervalInMs = (options.device.poll_interval * 1_000) || 2_000;
-    } else if (hh > 23 && hh < 6) {
-        console.log("Noite");
-        intervalChange = true;
-        pollIntervalInMs = (options.device.poll_interval * 5_000) || 6_000;    
-    }
+    pollIntervalInMs, intervalChange = getInterval();
+    console.log(pollIntervalInMs, intervalChange)
 
     if(intervalChange) {
-        intervalChange = false;
-
         try {
             dataFetcher.stop();
         } catch (e) {

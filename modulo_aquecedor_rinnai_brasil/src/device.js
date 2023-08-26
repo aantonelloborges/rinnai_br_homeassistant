@@ -1,7 +1,6 @@
 const rinnaiApi = require('./rinnai-api.js');
 const entities = require('./entities.js');
 
-
 const setTargetWaterTemperature = (temperature) => {
     rinnaiApi.setTargetTemperature(temperature);
 }
@@ -35,6 +34,7 @@ const updateDeviceState = (retries = 0) => {
     //     console.log("[DEVICE]: Preventing state update");
     //     return;
     // }
+    console.log('updateDeviceState');
     return rinnaiApi.getState()
         .then(({ targetTemperature, isHeating, isPoweredOn }) => {
 
