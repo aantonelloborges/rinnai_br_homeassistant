@@ -93,6 +93,7 @@ while (true) {
     console.log(pollIntervalInMs, intervalChange)
 
     if(intervalChange) {
+        intervalChange = false;
         try {
             dataFetcher.stop();
         } catch (e) {
