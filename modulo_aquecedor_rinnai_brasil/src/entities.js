@@ -93,17 +93,17 @@ const switchHeating = createEntity('switch', 'heating_switch', {
     name: 'Aquecedor'
 })
 
-const switchPriority = createEntity('switch', 'priority_switch', {
-    device_class: 'switch',
-    optimistic: true,
-    icon: 'mdi:power',
-    name: 'Prioridade'
-})
+//const switchPriority = createEntity('switch', 'priority_switch', {
+//    device_class: 'switch',
+//    optimistic: true,
+//    icon: 'mdi:power',
+//    name: 'Prioridade'
+//})
 
-const priorityIP = createEntity('sensor', 'priority_ip', {
-    icon: 'mdi:ip-network',
-    name: 'IP em Prioridade'
-})
+//const priorityIP = createEntity('sensor', 'priority_ip', {
+//    icon: 'mdi:ip-network',
+//    name: 'IP em Prioridade'
+//})
 
 const waterFlow = createEntity('sensor', 'water_flow', {
     icon: 'mdi:water',
@@ -159,8 +159,8 @@ module.exports = {
     outletWaterTemperature,
     heatingState,
     switchHeating,
-    priorityIP,
-    switchPriority,
+    //priorityIP,
+    //switchPriority,
     waterFlow,
     power,
     gasConsumption,
